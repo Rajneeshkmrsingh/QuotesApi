@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="inner" data-aos="zoom-in">
+            <div class="box" data-aos="flip-left">
+                <span class=" fas fa-quote-left"></span>
+                <p class="quotes"></p>
+                <h3 class="author"></h3>
+            </div>
+            <button class="reset btn"> Next Please! </button>
+            <button class="tweetme"><img src="./img/twitter.png" alt="twitter"></button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        let data = "";
+        let quotesData = "";
+        const tweetNow = () => {
+            let tweet = `https://twitter.com/intent/tweet?text=${quotesData.text}`;
+            window.open(tweet);
+        };
+        const getNewQuotes = () => {
+            let max = 1643;
+            let rnum = Math.floor(Math.random() * (max + 1));
+            quotesData = data[rnum];
+            document.querySelector(".quotes").textContent = `${(quotesData.text)}`;
+            document.querySelector(".author").textContent = `${(quotesData.author)}`;
+            quotesData.author == null ? (document.querySelector(".author").textContent = "unknown") : (document.querySelector(".author").textContent = `${quotesData.author}`);
+        };
+        async function quotes() {
+            try {
+                let api = await fetch("https://type.fit/api/quotes");
+                data = await api.json();
+                getNewQuotes();
+
+            } catch (error) {
+                console.error(error);
+            };
+        };
+        quotes();
+        document.querySelector(".reset").onclick = function () {
+            getNewQuotes();
+        }
+        document.querySelector(".tweetme").addEventListener("click", tweetNow);
+    </script>
+</body>
+
+</html>
